@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Jogo da Velha</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+		table {
+			margin: auto;
+		}
+		td {
+			width: 50px;
+			height: 50px;
+			text-align: center;
+			font-size: 32px;
+			border: 1px solid black;
+		}
+	</style>
+</head>
+<body>
+	<h1>Jogo da Velha</h1>
+	<table>
+		<tr>
+			<td id="0"></td>
+			<td id="1"></td>
+			<td id="2"></td>
+		</tr>
+		<tr>
+			<td id="3"></td>
+			<td id="4"></td>
+			<td id="5"></td>
+		</tr>
+		<tr>
+			<td id="6"></td>
+			<td id="7"></td>
+			<td id="8"></td>
+		</tr>
+	</table>
+
+	<script>
+		var currentPlayer = 'O';
+		var cells = document.getElementsByTagName('td');
+
+		for (var i = 0; i < cells.length; i++) {
+			cells[i].addEventListener('click', cellClicked);
+		}
+
+		function cellClicked() {
+			if (this.textContent === '') {
+				this.textContent = currentPlayer;
+				checkWinner();
+				currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+			}
+		}
+
+		function checkWinner() {
+			var winningCombinations = [
+				[0, 1, 2],
+				[3, 4, 5],
+				[6, 7, 8],
+				[0, 3, 6],
+				[1, 4, 7],
+				[2, 5, 8],
+				[0, 4, 8],
+				[2, 4, 6]
+			];
+
+			for (var i = 0; i < winningCombinations.length; i++) {
+				var combination = winningCombinations[i];
+				var a = cells[combination[0]].textContent;
+				var b = cells[combination[1]].textContent;
+				var c = cells[combination[2]].textContent;
+
+				if (a !== '' && a === b && b === c) {
+					alert('Vencedor: ' + a);
+					resetGame();
+					return;
+				}
+			}
+
+			var allCellsFilled = true;
+
+			for (var i = 0; i < cells.length; i++) {
+				if (cells[i].textContent === '') {
+					allCellsFilled = false;
+					break;
+				}
+			}
+
+			if (allCellsFilled) {
+				alert('Empate!');
+				resetGame();
+			}
+		}
+
+		function resetGame() {
+			for (var i = 0; i < cells.length; i++) {
+				cells[i].textContent = '';
+			}
+
+			currentPlayer = 'X';
+		}
+	</script>
+</body>
+</html>
